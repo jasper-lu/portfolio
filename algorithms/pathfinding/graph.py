@@ -43,7 +43,7 @@ class WeightGrid(Grid):
 
     def cost(self, current, next):
         #default to 1
-        return self.weights.get(coord, 1)
+        return self.weights.get(next, 1)
 
 class Queue:
     def __init__(self):
