@@ -1,7 +1,11 @@
 from graph import HWeightGrid, PriorityQueue, trace
 #astar combines djikstra and greedy breadth-first search. I skipped greedy BFS since astar implements it already any way
 
-def astar_search(graph, start, end):
+#tiebreaker. Increase to expand more near end, decrease to expand near starting point.
+#Only inc/dec by miniscule amounts, < cost per step / expected max path lenght
+tb = 1.0
+
+def astar_search(graph, start, end
     frontier = PriorityQueue()
     frontier.put(start, 0)
     came_from = {}
@@ -22,7 +26,7 @@ def astar_search(graph, start, end):
 
                 cost_so_far[next] = cost
                 #nodes are sorted by hueristic + cost. tiebreaker added, favored to expand more to the end
-                priority = graph.h(next, end) + cost
+                priority = graph.h(next, end) * tb + cost
                 #priority queue automatically chooses the next best neighbor
                 frontier.put(next, priority)
                 came_from[next] = current
