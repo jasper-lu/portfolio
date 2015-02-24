@@ -26,7 +26,7 @@ class Grid:
 
     def passable(self, coord):
         (x, y) = coord
-        return (x, y) not in walls
+        return (x, y) not in self.walls
 
     def neighbors(self, coord):
         (x, y) = coord
@@ -47,3 +47,15 @@ class Queue:
 
     def get(self):
         return self.elements.popleft()
+
+#traces through the came_from dicts
+def trace(path, end):
+    trace = []
+    
+    while path[end]:
+        trace.append(end)
+        end = path[end]
+
+    trace.append(end)
+
+    return trace[::-1] #clarity
