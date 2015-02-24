@@ -1,4 +1,5 @@
 from graph import WeightGrid, PriorityQueue, trace
+#djikstra's algorithm takes into account the "distances" between two points, or the weights of nodes
 
 def djikstra_search(graph, start, end):
     frontier = PriorityQueue()

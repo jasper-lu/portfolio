@@ -45,6 +45,17 @@ class WeightGrid(Grid):
         #default to 1
         return self.weights.get(next, 1)
 
+#with hueristics
+class HWeightGrid(WeightGrid):
+    def __init__(self, width, height):
+        super().__init__(width, height)
+
+    def h(self, coord, end):
+        #manhattan distance, min cost 1
+        dx = abs(end[0] - coord[0])
+        dy = abs(end[1] - coord[1])
+        return dx + dy
+
 class Queue:
     def __init__(self):
         self.elements = collections.deque()
