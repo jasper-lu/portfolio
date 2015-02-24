@@ -1,4 +1,5 @@
 import collections
+import heapq
 
 #For graphs with variable nodes/edges
 #Example:
@@ -35,6 +36,15 @@ class Grid:
         neighbors = filter(self.passable, neighbors)
         return neighbors
 
+class WeightGrid(Grid):
+    def __init__(self, width, height):
+        super().__init__(width, height)
+        self.weights = {}
+
+    def cost(self, current, next):
+        #default to 1
+        return self.weights.get(coord, 1)
+
 class Queue:
     def __init__(self):
         self.elements = collections.deque()
@@ -48,10 +58,23 @@ class Queue:
     def get(self):
         return self.elements.popleft()
 
+class PriorityQueue:
+    def __init__(self):
+        self.elements = []
+
+    def empty(self):
+        return len(self.elements) == 0
+
+    def put(self, item, priority):
+        heapq.heappush(self.elements, (priority, item))
+
+    def get(self):
+        return heapq.heappop(self.elements)[1]
+
 #traces through the came_from dicts
 def trace(path, end):
     trace = []
-    
+
     while path[end]:
         trace.append(end)
         end = path[end]
