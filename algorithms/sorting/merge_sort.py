@@ -1,5 +1,6 @@
 from utils import test, random_array, swap
 
+#divides array into subarrays until size 1, then merges until back to original array, sorted
 def merge(a, b):
     arr = []
     while a and b:
