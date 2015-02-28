@@ -1,6 +1,6 @@
 from utils import test, random_array, swap
 
-#divides array into subarrays until size 1, then merges until back to original array, sorted
+#divide and conquer by dividing into partitions with groups of numbers greater and less than the pivot
 def partition(arr, low, high):
     pivotIndex = low
     low = low + 1
