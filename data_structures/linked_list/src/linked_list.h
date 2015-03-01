@@ -35,4 +35,4 @@ void *removeLast(LList_t* list);
 void *removeAtIndex(LList_t* list, int index);
 
 //remove after a node
-void removeAfterLNode(LList_t* list, LNode_t* node, void* data);
+void *removeAfterLNode(LList_t* list, LNode_t* node);
