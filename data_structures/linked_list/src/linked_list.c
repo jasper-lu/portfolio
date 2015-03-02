@@ -1,4 +1,4 @@
-#include <stdlio.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "linked_list.h"
@@ -8,6 +8,14 @@ static LNode_t* createLNode(void *data);
 
 //frees a node and returns the pointer to the data
 static void* freeLNode(LNode_t* node);
+
+LList_t createLList(void (*destroy)(void* data)) {
+  LList_t list = malloc(sizeof(LList_t));
+  list->len = 0;
+  list->head = list->tail = NULL;
+  list->destroy = destroy;
+  return list;
+}
 
 void freeLList(LList_t* list) {
   LNode* curr = list->head;
@@ -58,9 +66,9 @@ void append(LList_t* list, void* data) {
 
 void* removeFirst(LList_t* list) {
   list->len--;
-  void* data = list->head->data;
-  freeLNode(list->head);
-  return data;
+  LNode_t* toRemove = list->head;
+  list->head = toRemove->next;
+  return freeLNode(list->head);
 }
 
 //possibly the slowest running function in this data struct
@@ -73,7 +81,7 @@ void* removeAtIndex(LList_t* list, int index) {
     LNode_t* removeAfter = list->head;
     //want to get to the one before the one i need to remove
     while (index > 1) {
-      removeAfter = removeAfter ->next;
+      removeAfter = removeAfter->next;
       index--;
     }
     return removeAfterLNode(list, removeAfter);
@@ -83,20 +91,20 @@ void* removeAtIndex(LList_t* list, int index) {
   return;
 }
 
+//will assume that the node passed will never be tail
 void *removeAfterLNode(LList_t* list, LNode_t* node) {
-  if (node->next == NULL) {
-    return;
-  }
   list->len--;
   LNode_t* toRemove = node->next;
-  void* data = toRemove->data;
+  if (toRemove == list->tail) {
+    list->tail = toRemove;
+  }
+
   node->next = toRemove->next;
-  free(toRemove);
-  return data;
+  return freeLNode(toRemove);
 }
 
 static LNode_t* createLNode(void* data) {
-  LNode_t* node = malloc(sizeOf(LNode_t));
+  LNode_t* node = malloc(sizeof(LNode_t));
   node->data = data;
   node->next = NULL;
   return node;

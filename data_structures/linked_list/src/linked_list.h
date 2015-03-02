@@ -1,15 +1,16 @@
 typedef struct LNode {
   void* data;
   struct LNode* data;
+  LNode_t* next;
 } LNode_t;
 
 typedef struct {
   int len;
-  struct LNode* head, tail;
+  struct LNode_t* head, tail;
   void (*destroy)(void *data);
 } LList_t;
 
-LList_t createLList(void (*destroy)(void*data));
+LList_t createLList(void (*destroy)(void* data));
 
 void freeLList(LList_t* list);
 
