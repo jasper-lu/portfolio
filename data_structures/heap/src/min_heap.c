@@ -45,6 +45,14 @@ void heap_push(Heap_t* heap, type value) {
 type heap_pop(Heap_t* heap) {
   type min = heap->data[0];
   heap->data[0] = heap->data[--heap->count];
+
+  //resize if too big
+  if (heap->size > base_size && heap->size > heap->count * 2) {
+    //half the size
+    heap->size /= 2;
+    heap->data = realloc(heap->data, sizeof(type) * heap->size);
+  }
+
   heapify(heap);
   return min;
 }
