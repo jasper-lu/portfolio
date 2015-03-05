@@ -6,9 +6,10 @@
 //change these two declarations to modify for idfferent types
 #define COMPARE(a, b) ((a) >= (b))
 
+//always leaves one to the right empty
 static const int base_size = 4;
 
-void heapify_helper(Heap_t* heap, int index);
+void heapify_helper(type* array, int count, int index);
 
 Heap_t* create_heap() {
   Heap_t* heap = malloc(sizeof(heap));
@@ -50,9 +51,28 @@ type heap_pop(Heap_t* heap) {
 
 void heapify(Heap_t* heap) {
   //starts on 1, then subtracts
-  heapify_helper(heap, 1);
+  heapify_helper(heap->data, heap->count, 0);
 }
 
-void heapify_helper(Heap_t* heap, int index) {
+//pass along heap and index of parent + 1. takes care of the shuffling
+void heapify_helper(type* array, int count, int index) {
+  int leftIndex = 2 * index + 1;
+  int rightIndex = 2 * index + 2;
+  int minIndex = index;
 
+  if (leftIndex <= count && array[leftIndex] < array[minIndex]) {
+    minIndex = leftIndex;
+  }
+
+  if (rightIndex <= count && array [rightIndex] < array[minIndex]) {
+    minIndex = rightIndex;
+  }
+
+  if (minIndex != index) {
+    //simple swap
+    type temp = array[index];
+    array[index] = array[minIndex];
+    array[minIndex] = temp;
+    heapify_helper(array, count, minIndex);
+  }
 }
