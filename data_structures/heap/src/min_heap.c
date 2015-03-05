@@ -8,12 +8,51 @@
 
 static const int base_size = 4;
 
+void heapify_helper(Heap_t* heap, int index);
+
 Heap_t* create_heap() {
   Heap_t* heap = malloc(sizeof(heap));
   *heap = (Heap_t) {
-    .size = 0,
+    .size = base_size,
     .count = 0,
-    .data = malloc(base_size)
+    //base size is 4 length array
+    .data = malloc(sizeof(type) * base_size)
   };
   return heap;
+}
+
+void heap_push(Heap_t* heap, type value) {
+  if (heap->size == heap->count) {
+    //double the size
+    heap->size *= 2;
+    heap->data = realloc(heap->data, sizeof(type) * heap->size);
+  }
+
+  int index = heap->count;
+
+  //while the parent is less than the data right now
+  while (index != 0 && COMPARE(heap->data[index/2], value)) {
+      //move the larger data down
+      heap->data[index] = heap->data[index/2];
+      index /= 2;
+  }
+
+  heap->count++;
+  heap->data[index] = value;
+}
+
+type heap_pop(Heap_t* heap) {
+  type min = heap->data[0];
+  heap->data[0] = heap->data[--heap->count];
+  heapify(heap);
+  return min;
+}
+
+void heapify(Heap_t* heap) {
+  //starts on 1, then subtracts
+  heapify_helper(heap, 1);
+}
+
+void heapify_helper(Heap_t* heap, int index) {
+
 }

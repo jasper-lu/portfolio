@@ -4,6 +4,7 @@
 
 #include "linked_list.h"
 
+//change this declaration for different linked list data types 
 static void freeData(void* data) {
   free((char* )data);
 }

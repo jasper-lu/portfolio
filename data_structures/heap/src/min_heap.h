@@ -13,4 +13,7 @@ Heap_t* create_heap();
 void heap_push(Heap_t *heap, type value);
 
 //removes the minimum value in heap
-int heap_pop(Heap_t *heap);
+type heap_pop(Heap_t *heap);
+
+//heapifies an array
+void heapify(Heap_t *heap);
