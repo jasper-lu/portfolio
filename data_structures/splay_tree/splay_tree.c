@@ -84,42 +84,47 @@ static void left_rotate(STree_t *tree, Node_t *node) {
       parent->parent->right = node;
     }
 
+    //take care of parent changes
     node->parent = parent->parent;
     if (node->left) {
       node->left->parent = parent;
     }
+    //transfer node's left
     parent->right = node->left
 
+    //switch places of parent and child
     node->left = parent;
     parent->parent = node;
 }
 
-//rotate by parent
-static void left_rotate(STree_t *tree, Node_t *node) {
-  Node_t *newParent = node->right;
-  if (newParent) {
-    newParent->parent = node->parent;
-    if (newParent->left) {
-      newParent->left->parent = node;
-    }
-    newParent->left = node;
-  }
-  if (!node->parent) {
-    tree->root = newParent;
-  } else if (node = node->parent->left) {
-    node->parent->left = newParent;
-  } else {
-    node->parent->right = newParent;
+static void right_rotate(Node_t *node) {
+  Node_t *parent = node->parent;
+  //exit if node is already root
+  if (!parent) {
+    return;
   }
 
-  //delayed until here so I could find out which of its parent's nodes the rotating node is
-  if (newParent) {
-    node->right = newParent->left;
-    node->parent = newParent;
+  if (!parent->parent) {
+    tree->root = node;
+  } else if (parent == parent->parent->left) {
+    parent->parent->left = node;
+  } else {
+    parent->parent->right = node;
   }
+
+  //take care of parent changes
+  node->parent = parent->parent;
+  if (node->right) {
+    node->right->parent = parent;
+  }
+  //transfer node's left
+  parent->left = node->right
+
+  //switch places of parent and child
+  node->right = parent;
+  parent->parent = node;
 }
 
-static void right_rotate(Node_t *node);
 static void splay(Node_t *node);
 
 static Node_t *createNode(type value) {
