@@ -1,5 +1,5 @@
 //default to left
-#define COMPARE(a,b) ((a) >= (b))
+#define COMPARE(a,b) ((a) > (b))
 
 typedef int type;
 
@@ -13,6 +13,8 @@ typedef struct STree {
   Node_t *root;
   type size;
 } STree_t;
+
+STree_t *createSTree();
 
 void freeSTree(Stree_t *tree);
 

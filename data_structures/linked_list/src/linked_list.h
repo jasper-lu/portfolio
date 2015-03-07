@@ -6,6 +6,7 @@ typedef struct LNode {
 typedef struct LList {
   int len;
   LNode_t *head, *tail;
+  //needs custom destroy for nodes because of void pointer data
   void (*destroy)(void *data);
 } LList_t;
 
