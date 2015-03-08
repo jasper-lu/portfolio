@@ -7,7 +7,7 @@
 static void left_rotate(Node_t *node);
 static void right_rotate(Node_t *node);
 //splay function to put called node at the top
-static void splay(Node_t *node);
+static void splay(STree_t *tree, Node_t *node);
 
 //util functions for nodes
 static Node_t *createNode(type value);
@@ -125,7 +125,33 @@ static void right_rotate(Node_t *node) {
   parent->parent = node;
 }
 
-static void splay(Node_t *node);
+static void splay(STree_t tree, Node_t *node) {
+  while (node->parent) {
+    if (!node->parent->parent) {
+        if (node == node->parent->left) {
+          right_rotate(tree, node);
+        } else {
+          left_rotate(tree, node);
+        }
+    } else if (node == node->parent->left && node->parent == node->parent->parent->left) {
+      //zig zig
+      right_rotate(tree, node->parent);
+      right_rotate(tree, node);
+    } else if (node == node->parent->left && node->parent == node->parent->parent->right) {
+      //zig zag
+      right_rotate(tree, node);
+      left_rotate(tree, node);
+    } else if (node == node->parent->right && node->parent == node->parent->parent->left) {
+      //other zig zag
+      left_rotate(tree, node);
+      right_rotate(tree, node);
+    } else {
+      //other zig zig
+      right_rotate(tree, node->parent);
+      right_rotate(tree, node);
+    }
+  }
+}
 
 static Node_t *createNode(type value) {
   Node_t *node = malloc(sizeof(heap));
