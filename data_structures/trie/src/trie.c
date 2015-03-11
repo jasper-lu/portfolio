@@ -99,7 +99,7 @@ bool trieRemoveHelper(Trie_t *trie, TNode_t *node, char *key, int index) {
             node->children = curr->next;
           }
         }
-        if (node->children->key == curr) {
+        if (node->children == curr) {
           node->children = NULL;
           return true;
         }
@@ -111,12 +111,13 @@ bool trieRemoveHelper(Trie_t *trie, TNode_t *node, char *key, int index) {
 
 type trieRemove(Trie_t *trie, char *key) {
   TNode_t *retNode = findNode(trie, key);
-  if (!resNode) {
+  if (!retNode) {
     return 0;
   }
   type ret = retNode->value;
 
-  return trieRemoveHelper(trie, trie->root, key, 0);
+  trieRemoveHelper(trie, trie->root, key, 0);
+  return ret;
 }
 
 static TNode_t *createTNode(char key, type value) {
