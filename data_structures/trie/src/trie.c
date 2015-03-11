@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "trie.h"
 
@@ -73,18 +74,35 @@ type find(Trie_t *trie, char *key) {
 }
 
 //will always contain the key
-bool trieRemoveHelper(TNode_t *node, TNode_t *from, char *key, int index) {
+bool trieRemoveHelper(Trie_t *trie, TNode_t *node, char *key, int index) {
   if (node) {
+    //find the null literal, or find the current key
+    while (node->key != key[index]) {
+      node = node->next;
+    }
     //base
     if (node->key == '\0') {
-      if (node->next && from->children == node) {
-        from->children = node->next;
-      }
-      free(node);
       return true;
     } else {
-      while (node->key != key[index]) {
-
+      if (trieRemoveHelper(trie, node->children, key, index+1)) {
+        TNode_t *curr = node->children;
+        TNode_t *from = NULL;
+        while (curr->key != key[index + 1]) {
+          from = curr;
+          curr = curr->next;
+        }
+        //patch up the link
+        if (curr->next) {
+          if (from) {
+            from->next = curr->next;
+          } else {
+            node->children = curr->next;
+          }
+        }
+        if (node->children->key == curr) {
+          node->children = NULL;
+          return true;
+        }
       }
     }
   }
@@ -92,10 +110,13 @@ bool trieRemoveHelper(TNode_t *node, TNode_t *from, char *key, int index) {
 }
 
 type trieRemove(Trie_t *trie, char *key) {
-  if (!findNode(trie, key)) {
+  TNode_t *retNode = findNode(trie, key);
+  if (!resNode) {
     return 0;
   }
+  type ret = retNode->value;
 
+  return trieRemoveHelper(trie, trie->root, key, 0);
 }
 
 static TNode_t *createTNode(char key, type value) {

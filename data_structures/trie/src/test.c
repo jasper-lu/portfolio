@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "trie.h"
 
@@ -27,6 +26,8 @@ int main() {
   printf("Node value is %d. Expected: %d\n", node->children->value, 15);
 
   printf("Find anne value. Value is %d. Expected: %d\n", find(trie, "anne"), 5);
+
+  trieRemove(trie, "anner");
 
   return 1;
 }
