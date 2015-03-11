@@ -6,6 +6,7 @@
 
 static TNode_t *createTNode(char key, type value);
 static TNode_t *findNode(Trie_t *trie, char *key);
+static bool trieRemoveHelper(Trie_t *trie, TNode_t *node, char *key, int index);
 static void freeTNodeR(TNode_t *node);
 
 Trie_t *createTrie() {
@@ -73,42 +74,6 @@ type find(Trie_t *trie, char *key) {
   return node->value;
 }
 
-//will always contain the key
-bool trieRemoveHelper(Trie_t *trie, TNode_t *node, char *key, int index) {
-  if (node) {
-    //find the null literal, or find the current key
-    while (node->key != key[index]) {
-      node = node->next;
-    }
-    //base
-    if (node->key == '\0') {
-      return true;
-    } else {
-      if (trieRemoveHelper(trie, node->children, key, index+1)) {
-        TNode_t *curr = node->children;
-        TNode_t *from = NULL;
-        while (curr->key != key[index + 1]) {
-          from = curr;
-          curr = curr->next;
-        }
-        //patch up the link
-        if (curr->next) {
-          if (from) {
-            from->next = curr->next;
-          } else {
-            node->children = curr->next;
-          }
-        }
-        if (node->children == curr) {
-          node->children = NULL;
-          return true;
-        }
-      }
-    }
-  }
-  return false;
-}
-
 type trieRemove(Trie_t *trie, char *key) {
   TNode_t *retNode = findNode(trie, key);
   if (!retNode) {
@@ -143,6 +108,43 @@ static TNode_t *findNode(Trie_t *trie, char *key) {
     }
   }
   return curr;
+}
+
+//will always contain the key
+static bool trieRemoveHelper(Trie_t *trie, TNode_t *node, char *key, int index) {
+  if (node) {
+    //find the null literal, or find the current key
+    //note to self: when the node key is null literal, key index is null as well, so this test passes
+    while (node->key != key[index]) {
+      node = node->next;
+    }
+    //base
+    if (node->key == '\0') {
+      return true;
+    } else {
+      if (trieRemoveHelper(trie, node->children, key, index+1)) {
+        TNode_t *curr = node->children;
+        TNode_t *from = NULL;
+        while (curr->key != key[index + 1]) {
+          from = curr;
+          curr = curr->next;
+        }
+        //patch up the link
+        if (curr->next) {
+          if (from) {
+            from->next = curr->next;
+          } else {
+            node->children = curr->next;
+          }
+        }
+        if (node->children == curr) {
+          node->children = NULL;
+          return true;
+        }
+      }
+    }
+  }
+  return false;
 }
 
 static void freeTNodeR(TNode_t *node) {

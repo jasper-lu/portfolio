@@ -27,19 +27,19 @@ int main() {
 
   printf("Find anne value. Value is %d. Expected: %d\n", find(trie, "anne"), 5);
 
-  printf("Removing anner.\n");
+  printf("Removing anner...\n");
 
   trieRemove(trie, "anner");
 
-  printf("Looking for anner\n");
+  printf("Anner should be removed.\nLooking for anner...\n");
 
   if (find(trie, "anner")) {
-    printf("Anner found. Remove not working");
+    printf("Anner found. Remove not working\n");
   } else {
-    printf ("Did not find anner. Remove is working");
+    printf ("Did not find anner. Remove is working\n");
   }
 
-  printf("looking for anne\n");
+  printf("Looking for anne...\n");
 
   if (find(trie, "anne")) {
     printf("Anne found. Remove is working\n");
