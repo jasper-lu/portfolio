@@ -39,19 +39,10 @@ TNode_t *add(Trie_t *trie, char *key, type value) {
     }
   }
 
-  //if the key is over, then create the null node and return
-  if (!key[index]) {
-    while (curr->next) {
-      curr = curr->next;
-    }
-    curr->next = createTNode('\0', value);
-    return curr->next;
-  }
-
-  //figure out if the empty one was next or child
-  if (key[index-1] && from->key == key[index-1]) {
-    from->children = createTNode(key[index++], BASE);
-    from = from->children;
+  if (!from) {
+    trie->root = createTNode(key[index++], BASE);
+    from = trie->root;
+    curr = from->children;
   } else {
     from->next = createTNode(key[index++], BASE);
     from = from->next;
@@ -81,6 +72,32 @@ type find(Trie_t *trie, char *key) {
   return node->value;
 }
 
+//will always contain the key
+bool trieRemoveHelper(TNode_t *node, TNode_t *from, char *key, int index) {
+  if (node) {
+    //base
+    if (node->key == '\0') {
+      if (node->next && from->children == node) {
+        from->children = node->next;
+      }
+      free(node);
+      return true;
+    } else {
+      while (node->key != key[index]) {
+
+      }
+    }
+  }
+  return false;
+}
+
+type trieRemove(Trie_t *trie, char *key) {
+  if (!findNode(trie, key)) {
+    return 0;
+  }
+
+}
+
 static TNode_t *createTNode(char key, type value) {
   TNode_t *new = malloc(sizeof(TNode_t));
   new->key = key;
@@ -103,7 +120,7 @@ static TNode_t *findNode(Trie_t *trie, char *key) {
       curr = curr->next;
     }
   }
-  return curr->children;
+  return curr;
 }
 
 static void freeTNodeR(TNode_t *node) {
